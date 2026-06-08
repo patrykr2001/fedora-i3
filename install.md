@@ -262,3 +262,100 @@ chsh -s /usr/bin/fish
 ```
 
 Logout and login to see the changes.
+
+# Supergfctl if Asusctl or Cardwire fails to change GPUs
+
+## Clone, build and install
+
+```bash
+# Install dependencies
+sudo dnf install rust cargo git dbus-devel systemd-devel
+
+# Clone repo
+git clone https://gitlab.com/asus-linux/supergfxctl.git
+cd supergfxctl
+
+# Build and install
+make
+sudo make install
+
+# Enable the service
+sudo systemctl enable --now supergfxd.service
+
+# Add yourself to the group
+sudo usermod -aG users $USER
+```
+
+## Scripts for easy use in i3
+
+Create the script file:
+```bash
+nano ~/.config/i3/scripts/gpu-switch.sh
+```
+
+And add:
+```bash
+#!/bin/bash
+
+CURRENT=$(supergfxctl --get 2>/dev/null | tr -d '[:space:]')
+
+show_status() {
+    echo "Aktualny tryb: $CURRENT"
+    echo "Dostępne tryby: $(supergfxctl --supported 2>/dev/null)"
+}
+
+switch_and_logout() {
+    local mode=$1
+    echo "Przełączam na: $mode"
+    sudo supergfxctl --mode $mode
+    sleep 1
+    i3-msg exit
+}
+
+case "$1" in
+    igpu|integrated)
+        switch_and_logout Integrated
+        ;;
+    hybrid)
+        switch_and_logout Hybrid
+        ;;
+    egpu)
+        switch_and_logout AsusEgpu
+        ;;
+    status)
+        show_status
+        ;;
+    *)
+        echo "Użycie: gpu-switch [igpu|hybrid|egpu|status]"
+        show_status
+        ;;
+esac```
+
+```bash
+chmod +x ~/.config/i3/scripts/gpu-switch.sh
+```
+
+Optionally add yourself to sudoers so it won't ask for password
+```bash
+sudo visudo
+```
+
+Add line:
+```bash
+your_user ALL=(ALL) NOPASSWD: /user/bin/supergfxctl
+```
+
+Optionally add shortcuts in i3
+```bash
+bindsym $mod+F1 exec --no-startup-id ~/.config/i3/scripts/gpu-switch.sh igpu
+bindsym $mod+F2 exec --no-startup-id ~/.config/i3/scripts/gpu-switch.sh hybrid
+bindsym $mod+F3 exec --no-startup-id ~/.config/i3/scripts/gpu-switch.sh egpu
+```
+
+Usage:
+```bash
+gpu-switch status    # current mode
+gpu-switch igpu      # only integrated graphics, will logout
+gpu-switch hybrid    # integrated + dGPU, will logout
+gpu-switch egpu      # enable eGPU, will logout
+```
