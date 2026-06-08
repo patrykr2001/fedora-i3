@@ -101,7 +101,7 @@ Cardwire it's experimental alternative for supergfxd
 sudo dnf install cardwire
 ```
 
-# Signign and loading NVIDIA drivers
+# Signing and loading NVIDIA drivers
 
 ## Install tools
 

@@ -1,29 +1,32 @@
-# Utwórz folder na fonty
-```fish
+# Create folder for fonts
+
+```bash
 mkdir -p ~/.local/share/fonts
 ```
 
-# Pobierz Iosevka Nerd Font
-```fish
+# Download your nerd font of choice
+
+E.g. Iosevka Nerd Font
+```bash
 wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Iosevka.zip -P /tmp/
 ```
 
-# Rozpakuj
-```fish
+# Unzip
+```bash
 unzip /tmp/Iosevka.zip -d ~/.local/share/fonts/Iosevka/
 ```
 
-# Odśwież cache fontów
-```fish
+# Refresh fonts cache
+```bash
 fc-cache -fv
 ```
 
-# Sprawdź czy font jest dostępny
-```fish
+# Check if font is available
+```bash
 fc-list | grep -i iosevka
 ```
 
-# Ustaw font w Alacritty `~/.config/alacritty/alacritty.toml`:
+# Set font in Alacritty `~/.config/alacritty/alacritty.toml`:
 ```toml
 [font]
 size = 12.0
@@ -42,12 +45,12 @@ family = "IosevkaTerm Nerd Font Mono"
 style = "Italic"
 ```
 
-# Ustaw font w i3 `~/.config/i3/config`:
-```fish
+# Set font in i3 `~/.config/i3/config`:
+```bash
 font pango:IosevkaTerm Nerd Font Mono 10
 ```
 
-# LazyVim `~/.config/nvim/lua/plugins/ui.lua` - utwórz plik:
+# LazyVim `~/.config/nvim/lua/plugins/ui.lua` - create file:
 
 ```lua
 return {
@@ -70,7 +73,7 @@ return {
 }
 ```
 
-# I ustaw font w `~/.config/nvim/lua/config/options.lua`:
+# And set font in `~/.config/nvim/lua/config/options.lua`:
 
 ```lua
 vim.opt.guifont = "Iosevka Nerd Font:h12"
