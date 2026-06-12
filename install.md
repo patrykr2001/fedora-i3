@@ -300,13 +300,13 @@ And add:
 CURRENT=$(supergfxctl --get 2>/dev/null | tr -d '[:space:]')
 
 show_status() {
-    echo "Aktualny tryb: $CURRENT"
-    echo "Dostępne tryby: $(supergfxctl --supported 2>/dev/null)"
+    echo "Current mode: $CURRENT"
+    echo "Available modes: $(supergfxctl --supported 2>/dev/null)"
 }
 
 switch_and_logout() {
     local mode=$1
-    echo "Przełączam na: $mode"
+    echo "Switching to: $mode"
     sudo supergfxctl --mode $mode
     sleep 1
     i3-msg exit
@@ -326,7 +326,7 @@ case "$1" in
         show_status
         ;;
     *)
-        echo "Użycie: gpu-switch [igpu|hybrid|egpu|status]"
+        echo "Usage: gpu-switch [igpu|hybrid|egpu|status]"
         show_status
         ;;
 esac```
