@@ -19,7 +19,7 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 rm -rf ~/.config/nvim/.git
 ```
 
-# Optional settings
+# Extras
 
 ## Change default colorscheme:
 
@@ -145,11 +145,24 @@ return {
         if cmp.visible() and cmp.get_active_entry() then
           cmp.confirm({ select = false })
         else
-          fallback() -- normalny enter
+          fallback() -- normal enter
         end
       end, { "i", "s" }),
     })
     return opts
   end,
 }
+```
+
+## Keybind for moving lines around
+
+Edit `~/.config/nvim/lua/config/keymaps.lua`
+```lua
+-- Line moving
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
+
+-- Selection moving in visual mode
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 ```

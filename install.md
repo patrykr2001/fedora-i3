@@ -359,3 +359,16 @@ gpu-switch igpu      # only integrated graphics, will logout
 gpu-switch hybrid    # integrated + dGPU, will logout
 gpu-switch egpu      # enable eGPU, will logout
 ```
+
+# Lazy-Git
+
+Install:
+```bash
+sudo dnf install lazygit
+```
+
+
+Usage:
+```bash
+lazygit
+```
