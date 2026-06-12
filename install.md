@@ -25,7 +25,7 @@ sudo dnf swap tuned-ppd power-profiles-daemon --allowerasing
 systemctl enable --now power-profiles-daemon.service
 ```
 
-Optionall GUI
+Optional GUI
 ```bash
 sudo dnf install asusctl-rog-gui
 ```
@@ -60,7 +60,7 @@ You will see list of video outputs, e.g. `eDP-1` for laptop or `HDMI-1`, `DP-1` 
 
 Create/Edit `~/.Xresources`:
 ```bash
-Xft.dpi: 144
+Xft.dpi: 120
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hintstyle: hintfull
@@ -96,12 +96,12 @@ Option `AccelProfile "flat` disables mouse acceleration and changes `libinput Ac
 
 # Optional: Cardwire (dynamic GPU changing without reboot)
 
-Cardwire it's experimental alternative for supergfxd
+Cardwire is experimental alternative for supergfxd. Install:
 ```bash
 sudo dnf install cardwire
 ```
 
-# Signing and loading NVIDIA drivers
+# Signing and loading NVIDIA drivers with SecureBoot
 
 ## Install tools
 
@@ -158,7 +158,7 @@ sudo reboot
 # Remove old build modules
 sudo rm -rf /usr/lib/modules/$(uname -r)/extra/nvidia/
 
-# Force full rebuild with signign
+# Force full rebuild with signing
 sudo akmods --force --rebuild
 
 # Wait for it to finish (3-5 minutes), then check logs
@@ -263,7 +263,7 @@ chsh -s /usr/bin/fish
 
 Logout and login to see the changes.
 
-# Supergfctl if Asusctl or Cardwire fails to change GPUs
+# Supergfctl if Asusctl or Cardwire fails to change GPUs (especially with eGPU)
 
 ## Clone, build and install
 
@@ -335,7 +335,7 @@ esac```
 chmod +x ~/.config/i3/scripts/gpu-switch.sh
 ```
 
-Optionally add yourself to sudoers so it won't ask for password
+Optionally add it to sudoers so it won't ask for password
 ```bash
 sudo visudo
 ```
