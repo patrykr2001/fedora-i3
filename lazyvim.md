@@ -82,6 +82,33 @@ return {
 }
 ```
 
+## Selecting file manager
+
+By default when opening `nvim` in a directory, e.g. `nvim .` or `nvim .config` etc. both `neo-tree` and `snacks` is open. You can disable either one and keep using only one file manager.
+
+Edit `~/.config/nvim/lua/plugins/ui.lua`:
+
+### Disable `snacks`
+
+```lua
+{
+  "folke/snacks.nvim",
+  opts = {
+    explorer = { enabled = false },
+    dashboard = { enabled = false }, -- opcjonalnie
+  },
+},
+```
+
+### Disable `neo-tree`
+
+```lua
+{
+  "nvim-neo-tree/neo-tree.nvim",
+  enabled = false,
+},
+```
+
 ## Change how auto completion works
 
 If you don't like `enter` key accepting line completions and to use `tab` instead, then edit `~/.config/nvim/lua/plugins/cmp.lua`:
