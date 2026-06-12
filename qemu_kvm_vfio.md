@@ -319,3 +319,81 @@ Update grub:
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
+# Automating creation of custom grub entries for VFIO after kernel updates
+
+Edit `/usr/local/bin/setup-kernel` and write:
+```bash
+#!/bin/bash
+
+KERNEL=$(uname -r)
+MACHINE_ID=$(cat /etc/machine-id)
+ENTRY_DIR="/boot/loader/entries"
+BASE_OPTIONS="root=UUID=efa0aea7-e3c2-45df-955f-328dd24e4aad ro rootflags=subvol=root rhgb quiet amd_iommu=on iommu=pt rd.driver.blacklist=nouveau,nova_core modprobe.blacklist=nouveau,nova_core"
+VFIO_IDS="vfio-pci.ids=10de:249d,10de:228b"
+
+echo "=== Setup for kernel: $KERNEL ==="
+
+# Step 1: Check if NVIDIA modules are build
+echo "[1/4] Checking NVIDIA modules..."
+if ! ls /usr/lib/modules/$KERNEL/extra/nvidia/nvidia.ko.xz &>/dev/null; then
+    echo "No NVIDIA modules found —  building..."
+    sudo akmods --force --rebuild
+    sudo dracut --force
+else
+    echo "OK —  NVIDIA modules are present"
+fi
+
+# Step 2: Check signing
+echo "[2/4] Checking if modules are signed..."
+sudo modprobe nvidia 2>/dev/null && echo "OK —  modules load corectly" || echo "WARNING —  issue with signing, check MOK"
+
+# Step 3: Create kernels VFIO entry
+echo "[3/4] Creating VFIO entry in bootloader..."
+VFIO_ENTRY="$ENTRY_DIR/${MACHINE_ID}-${KERNEL}-vfio.conf"
+
+if [ -f "$VFIO_ENTRY" ]; then
+    echo "OK —  VFIO entry already present"
+else
+    cat > "$VFIO_ENTRY" << EOF
+title Fedora Linux —  VFIO (VM with GPU) ($KERNEL)
+version $KERNEL
+linux /vmlinuz-$KERNEL
+initrd /initramfs-$KERNEL.img
+options $BASE_OPTIONS $VFIO_IDS
+grub_users \$grub_users
+grub_arg --unrestricted
+grub_class fedora
+EOF
+    echo "OK —  created $VFIO_ENTRY"
+fi
+
+# Step 4: Update GRUB
+echo "[4/4] Updating GRUB..."
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+echo ""
+echo "=== Done! ==="
+echo "Bootloader entries:"
+ls $ENTRY_DIR/ | grep $KERNEL
+```
+
+Then:
+```bash
+sudo chmod +x /usr/local/bin/setup-kernel
+```
+
+And create hook that will launch the script automatically after kernel update. Edit `/etc/kernel/postinst.d/99-setup-nvidia-vfio`:
+```bash
+#!/bin/bash
+/usr/local/bin/setup-kernel
+```
+
+Then:
+```bash
+sudo chmod +x /etc/kernel/postinst.d/99-setup-nvidia-vfio
+```
+
+Manual usage after kernel update:
+```bash
+setup-kernel
+```
