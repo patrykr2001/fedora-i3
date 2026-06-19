@@ -1,5 +1,7 @@
 # My config for i3-status
 
+## Statuses
+
 Edit `~/.config/i3status/config`:
 ```
 # i3status configuration file.
@@ -58,4 +60,13 @@ memory {
 tztime local {
         format = "%Y-%m-%d %H:%M:%S"
 }
+```
+
+## Catppuccin Mocha Theme
+
+Edit and change `~/.config/i3status/config`:
+```bash
+color_good	= "#a6e3a1"
+color_degraded	= "#f9e2af"
+color_bad	= "#f38ba8"
 ```
