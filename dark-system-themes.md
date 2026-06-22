@@ -18,14 +18,14 @@ echo "[Settings]
 gtk-application-prefer-dark-theme=1
 gtk-theme-name=adw-gtk3-dark
 gtk-icon-theme-name=Adwaita
-gtk-font-name=Iosevka Nerd Font Mono 9
+gtk-font-name=Iosevka Nerd Font 9
 gtk-cursor-theme-name=Adwaita" > ~/.config/gtk-3.0/settings.ini
 
 echo "[Settings]
 gtk-application-prefer-dark-theme=1
 gtk-theme-name=adw-gtk3-dark
 gtk-icon-theme-name=Adwaita
-gtk-font-name=Iosevka Nerd Font Mono 9
+gtk-font-name=Iosevka Nerd Font 9
 gtk-cursor-theme-name=Adwaita" > ~/.config/gtk-4.0/settings.ini
 ```
 
@@ -37,7 +37,7 @@ mkdir -p ~/.config/xsettingsd
 
 echo 'Net/ThemeName "adw-gtk3-dark"
 Net/IconThemeName "Adwaita"
-Gtk/FontName "Iosevka Nerd Font Mono 9"
+Gtk/FontName "Iosevka Nerd Font 9"
 Gtk/CursorThemeName "Adwaita"' > ~/.config/xsettingsd/xsettingsd.conf
 ```
 
